@@ -1,0 +1,86 @@
+---
+title: "ShinyApp Assignment - Developing Data Products  Week 4  
+            Johns Hopkins University"
+author: "Jagannath Gharpure"
+date: "October 5, 2017"
+output:
+  slidy_presentation: default
+  ioslides_presentation:
+    logo: ../../img/bloomberg_shield.png
+  beamer_presentation: default
+always_allow_html: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Introduction
+This presentation describes how to use the shiny app submitted as part of the assignment for week 4 of Developing Data Products by Johns Hopkins University on Coursera.  This shiny app allows a user to draw a line on a cartesian plane by specifying the intercept and the slope of the line.  As the user changes values of these two parameters the shiny app interactively redraws the line with new parameters.
+
+## Where do I access this Shiny App?
+The url for this shiny app is [here](https://jtgharp.shinyapps.io/shinyApp1/)
+
+## How do I use this Shiny App?
+The left pane of the shiny app has two numeric input boxes. First input box is named Intercept Value.  Please enter a number.  It can be positive or negative number, integer or decimal valued.  For example, 3 , -4, 2.5 etc.
+
+The second input box is named Slope value.  Please enter the second number in this box.  It can be positive or negative number integer or decimal value.  For example, 1, -1.5, etc.
+
+## Note
+If you are using Google Chrome or Firefox browser  you will see up down arrows on the input boxes.  You can use those arrows to increment or decrement the numbers in the boxes. Microsoft Edge browser does not show these arrows on the input box. If you do not have any number in either or both boxes (blank  meaning null) then the line will not be displayed. 
+
+## What does the code look like
+Here I provide the code for UI.R and Server.R.  You can also find this code on the github link here.
+
+## UI.R code
+
+```
+library(shiny)
+shinyUI(fluidPage(
+            titlePanel("Draw a Line By Specifying Intercept and Slope"),
+      
+            sidebarLayout(
+                  sidebarPanel(
+                        fluidRow(
+                              column(5, 
+                               numericInput("intercept", label = h3("Intercept Value"), value = 9)
+                               )
+                        
+                  
+                        ),
+                        fluidRow(
+                        
+                              column(5, 
+                               numericInput("slope", label = h3("Slope Value"), value = -1)
+                              )
+                        
+                        )
+                        
+                  ),
+                  
+            
+                  mainPanel(
+                        plotOutput("plot1")
+                  )
+            )
+      )
+)
+```
+
+## Sever.R code
+
+```
+library(shiny)
+shinyServer( function(input, output) {
+      
+      output$plot1 <- renderPlot({
+                    plot(NA, type="l", xlim=c(-10,10),ylim=c(-10,10), xlab="X", ylab="Y", lwd=3)
+                        abline(h=0)
+                        abline(v=0)
+                        if((!is.na(input$intercept)) & (!is.na(input$slope))){
+                        abline(input$intercept,input$slope, col="red", lwd="2") } 
+      })
+}
+)
+```
+
+
